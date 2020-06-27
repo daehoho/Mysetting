@@ -1,25 +1,36 @@
-set nocompatible
-filetype off
+"Daeho's Vim settings
+"install plugin
+"1 :source %
+"2 :PluginInstall
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
-Plugin 'gmarik/Vundle.vim' "required
-Plugin 'tpope/vim-fugitive' "reuquired
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'tpope/vim-fugitive'
+Plugin 'git://git.wincent.com/command-t.git'
 Plugin 'scrooloose/nerdtree'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'mattn/emmet-vim'
-Plugin 'Shougo/neocomplcache.vim'
+Plugin 'shougo/vimshell.vim'
+Plugin 'shougo/vimproc.vim'
+Plugin 'bling/vim-airline'
+Plugin 'itchyny/calendar.vim' "ex) :Calendar :Calendar -view-clock
+"Plugin 'Yggdroot/indentLine'
 Plugin 'nathanaelkane/vim-indent-guides'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'tpope/vim-surround'
-Plugin 'kchmck/vim-coffee-script'
-Plugin 'moll/vim-node'
-Plugin 'vim-scripts/indentpython.vim'
-Bundle 'Valloric/YouCompleteMe'
-call vundle#end()
-filetype plugin indent on " Put your non-Plugin stuff after this line
+Plugin 'plasticboy/vim-markdown'
+"Plugin 'tommcdo/vim-lion' "ex) gl,
+Plugin 'pangloss/vim-javascript'
+Plugin 'diepm/vim-rest-console'
+Plugin 'aquach/vim-http-client'
+Plugin 'jason0x43/vim-js-indent'
+Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+Plugin 'ekalinin/dockerfile.vim'
+Plugin 'stephpy/vim-yaml'
+call vundle#end()            " required
+filetype plugin indent on    " required
 
-filetype plugin indent on
+set clipboard=unnamed
+set mouse=a
 set autoindent
 set cindent
 set smartindent
@@ -28,9 +39,9 @@ set nocompatible
 set ruler
 set nu
 set tabstop=2
+set expandtab
 set shiftwidth=4
 set softtabstop=2
-set expandtab
 set showcmd
 set showmatch
 set enc=UTF-8
@@ -38,36 +49,64 @@ set fileencodings=UTF-8
 set title
 set tabstop=4 shiftwidth=4 et
 set formatoptions-=r
-let g:indent_guides_start_level=2
-let g:indent_guides_guide_size=1
 syntax on
 
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#left_sep = ' '
-let g:airline#extensions#tabline#left_alt_sep = '|'
-"let g:airline_section_d = '%{strftime("%c")}'
-let g:airline_section_y = 'BN: %{bufnr("%")}'
+"VimShell Setting
+nnoremap <F4> <ESC>:sp<CR><C-w><C-w><ESC>:resize 15<CR><ESC>:VimShell<CR>
+"NERDTree Setting
+nnoremap <F3> <ESC>:NERDTreeToggle<CR>
+let g:NERDTreeDirArrowExpandable = '▸'
+let g:NERDTreeDirArrowCollapsible = '▾'
+"Calendar Setting
+let g:calendar_google_calendar = 1
+let g:calendar_google_task = 1
+"IndentLine Setting
+let g:indentLine_color_gui = '#385900'
+let g:indentLine_color_term = 100
+let g:indentLine_char = '¦'
+let g:indentLine_first_char = ''
+let g:indentLine_showFirstIndentLevel = 0
+let g:indentLine_enabled = 0
+let g:indentLine_fileTypeExclude = ['help', 'nerdtree', 'text', 'sh']
+let g:indentLine_bufNameExclude = ['_.*', 'NERD_tree.*']
+let g:indentLine_maxLines = 3000
+nnoremap \il :IndentLinesToggle
 
-let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
-let g:ycm_confirm_extra_conf = 0
-"To avoid conflict snippets
-let g:ycm_key_list_select_completion = ['<C-j>', '<Down>']
-let g:ycm_key_list_previous_completion = ['<C-k>', '<Up>']
-let g:ycm_autoclose_preview_window_after_completion = 1
+"javascript setting
+let g:javascript_plugin_jsdoc = 1
+set conceallevel=1
+set concealcursor=""
 
+autocmd FileType javascript inoremap   @ =syntax_expand#expand("@", "this")
+autocmd FileType javascript inoremap   # =syntax_expand#expand("#", ".prototype.")
+autocmd FileType javascript inoremap   < =syntax_expand#expand_head("<", "return")
+let g:javascript_conceal_function  = "ƒ"
+let g:javascript_conceal_prototype = "#"
+let g:javascript_conceal_return    = "<"
+let g:javascript_conceal_static    = "•"
+let g:javascript_conceal_super     = "Ω"
+let g:javascript_conceal_this      = "@"
+let g:javascript_conceal_undefined = "¿"
+let g:javascript_conceal_null      = "ø"
+"map l :exec &conceallevel ? "set conceallevel=0" : "set conceallevel=1"
 
-nnoremap <leader>g :YcmCompleter GoTo<CR>
-nnoremap <leader>gg :YcmCompleter GoToImprecise<CR>
-nnoremap <leader>d :YcmCompleter GoToDeclaration<CR>
-nnoremap <leader>t :YcmCompleter GetType<CR>
-nnoremap <leader>p :YcmCompleter GetParent<CR>
+"indent guides setting
+let g:indent_guides_enable_on_vim_startup = 1
+nnoremap <F2> :IndentGuidesToggle<CR>
 
-map <Leader>nt <ESC>:NERDTree<CR>
-execute pathogen#infect()
-syntax on
-filetype plugin indent on
-set tabstop=4 shiftwidth=4 et
-let g:indent_guides_start_level=2
-let g:indent_guides_guide_size=1
-set softtabstop=2
-set expandtab
+"vim-rest-console
+"let g:vrc_trigger = ',J'
+let g:vrc_curl_opts = {
+  \ '-sS': '',
+  \ '--connect-timeout': 10,
+  \ '-i': '',
+  \ '--max-time': 60,
+  \ '-k': '',
+\}
+let g:vrc_show_command = 1
+"let g:vrc_debug = 1
+
+let s:vrc_auto_format_response_patterns = {
+  \ 'json': 'python -m json.tool',
+  \ 'xml': 'xmllint --format -',
+\}
